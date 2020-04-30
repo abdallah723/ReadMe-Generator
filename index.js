@@ -53,8 +53,8 @@ inquirer.prompt([
         message: "Please explain how to run tests for your applicatoin."
     }
 
-]).then(function(data) {
-  return `
+]).then (function (data) {
+  `
   # ${data.title}
 
   #Table of Context
@@ -87,12 +87,9 @@ inquirer.prompt([
 
   7) **Testing**
   ${data.test}
+`
 
-  `  
-
-  fs.writeFile(fileName, data, (err) => {
-      if (err) {
-          return console.log(err)
-      }
-  })
+    fs.writeFile("README.md", function () {
+        console.log("README has been generated")
+    })
 })
