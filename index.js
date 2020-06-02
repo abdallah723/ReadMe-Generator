@@ -4,8 +4,13 @@ const fs = require("fs");
 
 inquirer.prompt([
     {
+        type:"input",
+        name: "githubuser",
+        message: "What is your GitHub user ID?"
+    },
+    {
         type: "input",
-        name: "Title",
+        name: "title",
         message: "What is the title of your project?"
     },
     {
@@ -54,42 +59,56 @@ inquirer.prompt([
     }
 
 ]).then (function (data) {
-  `
-  # ${data.title}
+    
+    const ghLink = `https://api.github.com/users/${data.githubuser}`
+    axios.get(ghLink).then(function(res){
 
-  #Table of Context
-  1) Description
-  2) Installation
-  3) Usage
-  4) License
-  5) Contributors
-  6) Softwares
-  7) Testing
-
-
-  1) **Description**
-  ${data.description}
-
-  2) **Installation**
-  ${data.installation}
-
-  3) **Usage**
-  ${data.usage}
-
-  4) **License**
-  ${data.license}
-
-  5) **Contributors**
-  ${data.contributors}
-
-  6) **Softwares**
-  ${data.softwares}
-
-  7) **Testing**
-  ${data.test}
+        const readMeInfo = 
 `
 
-    fs.writeFile("README.md", function () {
+# ${data.title}
+
+#Table of Context
+1) Description
+2) Installation
+3) Usage
+4) License
+5) Contributors
+6) Softwares
+7) Testing
+8) Questions
+
+
+1) **Description**
+${data.description}
+
+2) **Installation**
+${data.installation}
+
+3) **Usage**
+${data.usage}
+
+4) **License**
+${data.license}
+![license badge](https://img.shields.io/badge/license-${(data.license)}-blueviolet?style=flat-square&logo=appveyor)
+
+5) **Contributors**
+${data.contributors}
+
+6) **Softwares**
+${data.softwares}
+
+7) **Testing**
+${data.test}
+
+8)**Question**
+If you have any questions, you can reach me at:
+![${res.data.html_url}]
+`
+
+    fs.writeFile("README.md", readMeInfo,function () {
         console.log("README has been generated")
     })
+ })
+
 })
